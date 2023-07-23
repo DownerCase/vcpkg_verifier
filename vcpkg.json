@@ -1,0 +1,10 @@
+{
+  "name": "vcpkg-verifier",
+  "version-string": "0.0.1",
+  "dependencies": [
+  ],
+  "vcpkg-configuration": {
+    "overlay-ports": [ "overlay_ports" ],
+    "overlay-triplets":  ["overlay_triplets"]
+  }
+}

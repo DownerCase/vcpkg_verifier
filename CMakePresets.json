@@ -1,0 +1,77 @@
+﻿{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "conf-base",
+      "hidden": true,
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "installDir": "${sourceDir}/out/install/${presetName}",
+      "cacheVariables": { "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/vcpkg/scripts/buildsystems/vcpkg.cmake" }
+    },
+    {
+      "name": "conf-build-debug",
+      "hidden": true,
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug" }
+    },
+    {
+      "name": "conf-build-release",
+      "hidden": true,
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Release" }
+    },
+    {
+      "name": "conf-windows-base",
+      "inherits": "conf-base",
+      "hidden": true,
+      "generator": "Ninja",
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "cl.exe",
+        "CMAKE_CXX_COMPILER": "cl.exe"
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      },
+      "architecture": {
+        "value": "x64",
+        "strategy": "external"
+      }
+    },
+    {
+      "name": "conf-windows-dynamic",
+      "hidden": true,
+      "inherits": "conf-windows-base",
+      "cacheVariables": {
+        "VCPKG_TARGET_TRIPLET": "x64-windows",
+        "VCPKG_HOST_TRIPLET": "x64-windows"
+      }
+    },
+    {
+      "name": "conf-windows-static",
+      "hidden": true,
+      "inherits": "conf-windows-base",
+      "cacheVariables": {
+        "VCPKG_TARGET_TRIPLET": "x64-windows-static",
+        "VCPKG_HOST_TRIPLET": "x64-windows-static",
+        "USE_STATIC_RUNTIME": true
+      }
+    },
+    {
+      "name": "x64-debug-dynamic",
+      "inherits": [ "conf-windows-dynamic", "conf-build-debug" ]
+    },
+    {
+      "name": "x64-release-dynamic",
+      "inherits": [ "conf-windows-dynamic", "conf-build-release" ]
+    },
+    {
+      "name": "x64-debug-static",
+      "inherits": [ "conf-windows-static", "conf-build-debug" ]
+
+    },
+    {
+      "name": "x64-release-static",
+      "inherits": [ "conf-windows-static", "conf-build-release" ]
+    }
+  ]
+}
