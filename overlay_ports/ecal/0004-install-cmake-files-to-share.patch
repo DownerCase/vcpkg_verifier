@@ -1,0 +1,25 @@
+From 75c190147acaf0fa5cc22e7128ae37c93e775f80 Mon Sep 17 00:00:00 2001
+From: DownerCase <downercase8@gmail.com>
+Date: Sat, 8 Jul 2023 14:28:58 +0100
+Subject: [PATCH] install cmake files to share
+
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index f447aaf29..baf59a1ef 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -272,7 +272,7 @@ set(eCAL_install_app_dir           ${CMAKE_INSTALL_BINDIR})
+ set(eCAL_install_archive_dir       ${CMAKE_INSTALL_LIBDIR})
+ set(eCAL_install_archive_dyn_dir   ${CMAKE_INSTALL_LIBDIR})
+ set(eCAL_install_bin_dir           ${CMAKE_INSTALL_BINDIR})
+-set(eCAL_install_cmake_dir         ${CMAKE_INSTALL_LIBDIR}/cmake/eCAL)
++set(eCAL_install_cmake_dir         share/eCAL)
+ set(eCAL_install_config_dir        ${CMAKE_INSTALL_SYSCONFDIR}/ecal)
+ set(eCAL_install_doc_dir           ${CMAKE_INSTALL_DOCDIR})
+ set(eCAL_install_include_dir       ${CMAKE_INSTALL_INCLUDEDIR})
+-- 
+2.41.0.windows.1
+

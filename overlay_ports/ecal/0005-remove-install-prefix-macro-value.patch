@@ -1,0 +1,24 @@
+From cf995ba31d4591b32023c63a093782ed04c611f6 Mon Sep 17 00:00:00 2001
+From: DownerCase <downercase8@gmail.com>
+Date: Sat, 8 Jul 2023 15:11:10 +0100
+Subject: [PATCH] remove install prefix macro value
+
+---
+ ecal/core/src/ecal_defs.h.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/ecal/core/src/ecal_defs.h.in b/ecal/core/src/ecal_defs.h.in
+index bbe4ac944..e01408efd 100644
+--- a/ecal/core/src/ecal_defs.h.in
++++ b/ecal/core/src/ecal_defs.h.in
+@@ -12,6 +12,6 @@
+ #define ECAL_INSTALL_LIB_DIR     "@eCAL_install_lib_dir@"
+ #define ECAL_INSTALL_CONFIG_DIR  "@eCAL_install_config_dir@"
+ #define ECAL_INSTALL_INCLUDE_DIR "@eCAL_install_include_dir@"
+-#define ECAL_INSTALL_PREFIX      "@CMAKE_INSTALL_PREFIX@"
++#define ECAL_INSTALL_PREFIX      ""
+ 
+ #endif // ecal_defs_h_included
+-- 
+2.41.0.windows.1
+

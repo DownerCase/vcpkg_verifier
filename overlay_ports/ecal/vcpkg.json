@@ -1,0 +1,24 @@
+{
+  "name": "ecal",
+  "version-semver": "5.11.4",
+  "description": "eCAL - enhanced Communication Abstraction Layer",
+  "homepage": "https://eclipse-ecal.github.io/ecal/",
+  "supports": "!emscripten",
+  "dependencies": [
+    "asio",
+    "curl",
+    "hdf5",
+    "protobuf",
+    "simpleini",
+    "tclap",
+    "tcp-pubsub",
+    {
+      "name": "vcpkg-cmake",
+      "host": true
+    },
+    {
+      "name": "vcpkg-cmake-config",
+      "host": true
+    }
+  ]
+}

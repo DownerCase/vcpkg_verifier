@@ -2,6 +2,7 @@
   "name": "vcpkg-verifier",
   "version-string": "0.0.1",
   "dependencies": [
+    "ecal"
   ],
   "vcpkg-configuration": {
     "overlay-ports": [ "overlay_ports" ],
