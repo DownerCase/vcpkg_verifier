@@ -5,8 +5,8 @@ endif()
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO eclipse-ecal/ecal
-    REF v5.11.4
-    SHA512 c340c336ed36d9c85990d2bf1f755bd32ea620eaeca6253565c1db8c1fdac7ec0e3ac934fedf396f8258d451c37d48a750ed5ba331a6b9b1822ae92962c0528a
+    REF v5.11.5
+    SHA512 5048f332e72892deeaf2d90b8e4193ef3e05187fbccde22ae1561fe40d2a9a2617749cf91a546f7dad456ecd2438e6d6d6b59304656b2e2769e7036100c37a99
     HEAD_REF master
     PATCHES
         0001-disable-app-plugins.patch
@@ -54,7 +54,7 @@ vcpkg_cmake_configure(
         -DECAL_THIRDPARTY_BUILD_HDF5=OFF
         -DCPACK_PACK_WITH_INNOSETUP=OFF
         -DDISABLE_FIND_PACKAGE_OVERLOAD=ON # From patch, disable find_package macro
-        -DECAL_BUILD_VERSION="5.11.4"
+        -DECAL_BUILD_VERSION="5.11.5"
 )
 
 vcpkg_cmake_install()

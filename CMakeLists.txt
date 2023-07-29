@@ -8,7 +8,7 @@ project ("vcpkg_verifier")
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-find_package(eCAL 5.11 CONFIG REQUIRED)
+find_package(eCAL 5.11.5 CONFIG REQUIRED)
 
 # Add source to this project's executable.
 add_executable (ecal_vcpkg_verifier "ecal_vcpkg_verifier.cpp")
