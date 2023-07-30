@@ -6,4 +6,6 @@ endif()
 
 project ("vcpkg_verifier")
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 add_subdirectory(src)

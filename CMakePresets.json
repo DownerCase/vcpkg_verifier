@@ -6,7 +6,21 @@
       "hidden": true,
       "binaryDir": "${sourceDir}/out/build/${presetName}",
       "installDir": "${sourceDir}/out/install/${presetName}",
-      "cacheVariables": { "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/vcpkg/scripts/buildsystems/vcpkg.cmake" }
+      "toolchainFile": "${sourceDir}/vcpkg/scripts/buildsystems/vcpkg.cmake",
+      "vendor": {
+        "microsoft.com/VisualStudioSettings/CMake/1.0": {
+          "enableMicrosoftCodeAnalysis": true,
+          "codeAnalysisRuleset": "NativeRecommendedRules.ruleset",
+          "disableExternalAnalysis": true,
+          "enableClangTidyCodeAnalysis": false,
+          "clangTidyChecks": "*,-abseil-*,-altera-*,-android-*,-fuchsia-*,-google-*,-llvm*,-modernize-use-trailing-return-type,-zircon-*,-readability-elseafter-return,-readability-static-accessed-through-instance,-readability-avoid-const-params-in-decls,-cppcoreguidelines-non-prvate-member-variables-in-classes,-misc-non-private-member-variables-in-classes"
+        },
+        "microsoft.com/VisualStudioRemoteSettings/CMake/1.0": {
+          "copySourcesOptions": {
+            "exclusionList": [ ".vs", ".git", "out", "vcpkg/buildtrees", "vcpkg/downloads", "vcpkg/packages" ]
+          }
+        }
+      }
     },
     {
       "name": "conf-build-debug",
@@ -18,6 +32,34 @@
       "hidden": true,
       "cacheVariables": { "CMAKE_BUILD_TYPE": "Release" }
     },
+
+    {
+      "name": "conf-linux-base",
+      "inherits": "conf-base",
+      "hidden": true,
+      "generator": "Ninja",
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "gcc",
+        "CMAKE_CXX_COMPILER": "g++"
+      },
+      "condition": {
+        "type": "inList",
+        "string": "${hostSystemName}",
+        "list": [
+          "Linux",
+          "Darwin"
+        ]
+      }
+    },
+    {
+      "name": "conf-linux-static",
+      "hidden": true,
+      "inherits": "conf-linux-base",
+      "cacheVariables": {
+        "VCPKG_TARGET_TRIPLET": "x64-linux"
+      }
+    },
+
     {
       "name": "conf-windows-base",
       "inherits": "conf-base",
@@ -42,8 +84,7 @@
       "hidden": true,
       "inherits": "conf-windows-base",
       "cacheVariables": {
-        "VCPKG_TARGET_TRIPLET": "x64-windows",
-        "VCPKG_HOST_TRIPLET": "x64-windows"
+        "VCPKG_TARGET_TRIPLET": "x64-windows"
       }
     },
     {
@@ -52,26 +93,34 @@
       "inherits": "conf-windows-base",
       "cacheVariables": {
         "VCPKG_TARGET_TRIPLET": "x64-windows-static",
-        "VCPKG_HOST_TRIPLET": "x64-windows-static",
         "USE_STATIC_RUNTIME": true
       }
     },
+
     {
-      "name": "x64-debug-dynamic",
+      "name": "msvc-dynamic-debug",
       "inherits": [ "conf-windows-dynamic", "conf-build-debug" ]
     },
     {
-      "name": "x64-release-dynamic",
+      "name": "msvc-dynamic-release",
       "inherits": [ "conf-windows-dynamic", "conf-build-release" ]
     },
     {
-      "name": "x64-debug-static",
+      "name": "msvc-static-debug",
       "inherits": [ "conf-windows-static", "conf-build-debug" ]
 
     },
     {
-      "name": "x64-release-static",
+      "name": "msvc-static-release",
       "inherits": [ "conf-windows-static", "conf-build-release" ]
+    },
+    {
+      "name": "gcc-static-debug",
+      "inherits": [ "conf-linux-static", "conf-build-debug" ]
+    },
+    {
+      "name": "gcc-static-release",
+      "inherits": [ "conf-linux-static", "conf-build-release" ]
     }
   ]
 }
