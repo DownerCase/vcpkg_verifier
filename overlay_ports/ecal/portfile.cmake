@@ -64,13 +64,17 @@ vcpkg_copy_pdbs()
 # file(INSTALL "${CURRENT_PACKAGES_DIR}/lib/cmake/eCAL/helper_functions" DESTINATION "${CURRENT_PACKAGES_DIR}/share/eCAL")
 
 vcpkg_cmake_config_fixup(PACKAGE_NAME eCAL           CONFIG_PATH share/eCAL)
-vcpkg_cmake_config_fixup(PACKAGE_NAME CMakeFunctions CONFIG_PATH cmake)
+vcpkg_cmake_config_fixup(PACKAGE_NAME CMakeFunctions CONFIG_PATH share/CMakeFunctions)
 
 # Remove extra debug files
 file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/debug/include")
 file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/debug/share")
 
 # Don't need global ini files
+if (VCPKG_TARGET_IS_WINDOWS)
 file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/cfg" "${CURRENT_PACKAGES_DIR}/debug/cfg")
+else()
+file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/etc" "${CURRENT_PACKAGES_DIR}/debug/etc")
+endif()
 
 file(INSTALL "${SOURCE_PATH}/LICENSE.txt" DESTINATION "${CURRENT_PACKAGES_DIR}/share/${PORT}" RENAME copyright)

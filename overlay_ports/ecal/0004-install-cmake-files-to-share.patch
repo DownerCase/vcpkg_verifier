@@ -1,11 +1,12 @@
-From 75c190147acaf0fa5cc22e7128ae37c93e775f80 Mon Sep 17 00:00:00 2001
+From 2728a2aeca8f08f760212f389e16857235928a6f Mon Sep 17 00:00:00 2001
 From: DownerCase <downercase8@gmail.com>
 Date: Sat, 8 Jul 2023 14:28:58 +0100
 Subject: [PATCH] install cmake files to share
 
 ---
- CMakeLists.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ CMakeLists.txt                            | 2 +-
+ thirdparty/cmake_functions/CMakeLists.txt | 8 ++------
+ 2 files changed, 3 insertions(+), 7 deletions(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 index f447aaf29..baf59a1ef 100644
@@ -20,6 +21,25 @@ index f447aaf29..baf59a1ef 100644
  set(eCAL_install_config_dir        ${CMAKE_INSTALL_SYSCONFDIR}/ecal)
  set(eCAL_install_doc_dir           ${CMAKE_INSTALL_DOCDIR})
  set(eCAL_install_include_dir       ${CMAKE_INSTALL_INCLUDEDIR})
+diff --git a/thirdparty/cmake_functions/CMakeLists.txt b/thirdparty/cmake_functions/CMakeLists.txt
+index 3ba185a97..2c6259bd2 100644
+--- a/thirdparty/cmake_functions/CMakeLists.txt
++++ b/thirdparty/cmake_functions/CMakeLists.txt
+@@ -4,12 +4,8 @@ include(cmake_functions.cmake)
+ 
+ project(CMakeFunctions VERSION 0.4.1)
+ 
+-if (MSVC)
+-# Variable definitions
+-set(cmake_functions_install_cmake_dir   cmake)
+-else (MSVC)
+-set(cmake_functions_install_cmake_dir   lib/cmake/${PROJECT_NAME}-${PROJECT_VERSION})
+-endif (MSVC)
++set(cmake_functions_install_cmake_dir share/${PROJECT_NAME})
++
+ set(cmake_functions_config              ${CMAKE_CURRENT_BINARY_DIR}/cmake/${PROJECT_NAME}Config.cmake)
+ set(cmake_functions_config_version      ${CMAKE_CURRENT_BINARY_DIR}/cmake/${PROJECT_NAME}ConfigVersion.cmake)
+ 
 -- 
-2.41.0.windows.1
+2.41.0.windows.3
 
