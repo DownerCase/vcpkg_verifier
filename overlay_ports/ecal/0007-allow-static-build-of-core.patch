@@ -1,4 +1,4 @@
-From 5a25fed3639da732cc64275c5307d18f6c042599 Mon Sep 17 00:00:00 2001
+From 01b00188f84e8f1386b6990e1a9906f931b16cb7 Mon Sep 17 00:00:00 2001
 From: DownerCase <downercase8@gmail.com>
 Date: Sat, 15 Jul 2023 17:32:45 +0100
 Subject: [PATCH] allow static build of core
@@ -91,5 +91,5 @@ index a962036f2..5d466cc86 100644
    #define ECALC_API_DEPRECATED __attribute__((deprecated))
  #else
 -- 
-2.41.0.windows.1
+2.41.0.windows.3
 

@@ -1,4 +1,4 @@
-From cf995ba31d4591b32023c63a093782ed04c611f6 Mon Sep 17 00:00:00 2001
+From f694b43e8760f4919dcf2bc5d7d9a6c325b1a435 Mon Sep 17 00:00:00 2001
 From: DownerCase <downercase8@gmail.com>
 Date: Sat, 8 Jul 2023 15:11:10 +0100
 Subject: [PATCH] remove install prefix macro value
@@ -20,5 +20,5 @@ index bbe4ac944..e01408efd 100644
  
  #endif // ecal_defs_h_included
 -- 
-2.41.0.windows.1
+2.41.0.windows.3
 
