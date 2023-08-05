@@ -59,6 +59,14 @@
         "VCPKG_TARGET_TRIPLET": "x64-linux"
       }
     },
+    {
+      "name": "conf-linux-dynamic",
+      "hidden": true,
+      "inherits": "conf-linux-base",
+      "cacheVariables": {
+        "VCPKG_TARGET_TRIPLET": "x64-linux-dynamic"
+      }
+    },
 
     {
       "name": "conf-windows-base",
@@ -121,6 +129,14 @@
     {
       "name": "gcc-static-release",
       "inherits": [ "conf-linux-static", "conf-build-release" ]
+    },
+    {
+      "name": "gcc-dynamic-debug",
+      "inherits": [ "conf-linux-dynamic", "conf-build-debug" ]
+    },
+    {
+      "name": "gcc-dynamic-release",
+      "inherits": [ "conf-linux-dynamic", "conf-build-release" ]
     }
   ]
 }
