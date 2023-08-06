@@ -1,5 +1,5 @@
 
-find_package(unofficial-inih CONFIG REQUIRED)
+find_package(unofficial-inih 57 CONFIG REQUIRED)
 
-add_executable(dummy main.cpp)
-target_link_libraries(dummy PRIVATE unofficial::inih::inih)
+add_executable(inireader-example INIReaderExample.cpp)
+target_link_libraries(inireader-example PRIVATE unofficial::inih::inireader)

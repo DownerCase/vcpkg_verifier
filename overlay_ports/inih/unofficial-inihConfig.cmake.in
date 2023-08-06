@@ -8,54 +8,71 @@ if(_IMPORT_PREFIX STREQUAL "/")
   set(_IMPORT_PREFIX "")
 endif()
 
-if(TARGET unofficial::inih::inih)
+if(TARGET unofficial::inih::libinih)
   return()
 endif()
 
 set(INIH_WITH_INI_READER @with_INIReader@)
 set(INIH_WITH_DEBUG @INIH_CONFIG_DEBUG@)
 
+###################
+####  libinih  ####
+
 # Add library target (note: inih always has a static build in vcpkg).
-add_library(unofficial::inih::inih STATIC IMPORTED)
+add_library(unofficial::inih::libinih STATIC IMPORTED)
 
-set_target_properties(unofficial::inih::inih PROPERTIES
+set_and_check(INIH_INIHLIB_RELEASE "${_IMPORT_PREFIX}/lib/inih.lib")
+
+# Add interface include directories and link interface language
+set_target_properties(unofficial::inih::libinih PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+  IMPORTED_LINK_INTERFACE_LANGUAGES "C"
+  IMPORTED_LOCATION_RELEASE "${INIH_INIHLIB_RELEASE}"
+  IMPORTED_CONFIGURATIONS "RELEASE"
 )
-
-set(INIH_LINK_LANGAUGES "C")
-set(INIH_LINK_LIBRARIES_RELEASE "${_IMPORT_PREFIX}/lib/inih.lib")
-set(INIH_HEADER_FILES "${_IMPORT_PREFIX}/include/ini.h")
-if(INIH_WITH_INI_READER)
-  list(APPEND INIH_LINK_LANGAUGES "CXX")
-  list(APPEND INIH_LINK_LIBRARIES_RELEASE "${_IMPORT_PREFIX}/lib/INIReader.lib")
-  list(APPEND INIH_HEADER_FILES "${_IMPORT_PREFIX}/include/INIReader.h")
-endif()
-
-list(APPEND _IMPORT_CHECK_FILES "${INIH_HEADER_FILES}")
-
-# Add interface include directories and link interface languages (applies to all configurations).
-set_target_properties(unofficial::inih::inih PROPERTIES
-  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-  IMPORTED_LINK_INTERFACE_LANGUAGES "${INIH_LINK_LANGAUGES}"
-)
-
-# Add release libraries
-set_target_properties(unofficial::inih::inih PROPERTIES 
-  IMPORTED_LOCATION_RELEASE "${INIH_LINK_LIBRARIES_RELEASE}"
-)
-list(APPEND _IMPORT_CHECK_FILES "${INIH_LINK_LIBRARIES_RELEASE}")
 
 if(INIH_WITH_DEBUG)
-  # Add debug libraries
-  set(INIH_LINK_LIBRARIES_DEBUG "${_IMPORT_PREFIX}/debug/lib/inih.lib")
-  if(INIH_WITH_INI_READER)
-    list(APPEND INIH_LINK_LIBRARIES_DEBUG "${_IMPORT_PREFIX}/debug/lib/INIReader.lib")
-  endif()
-  set_target_properties(unofficial::inih::inih PROPERTIES 
-    IMPORTED_LOCATION_DEBUG "${INIH_LINK_LIBRARIES_DEBUG}"
+  set_property(TARGET unofficial::inih::libinih APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
+  set_and_check(INIH_LINK_LIBRARY_DEBUG "${_IMPORT_PREFIX}/debug/lib/inih.lib")
+  set_target_properties(unofficial::inih::libinih PROPERTIES 
+    IMPORTED_LOCATION_DEBUG "${INIH_LINK_LIBRARY_DEBUG}"
   )
-  list(APPEND _IMPORT_CHECK_FILES "${INIH_LINK_LIBRARIES_DEBUG}")
 endif()
+
+list(APPEND _IMPORT_CHECK_FILES "${_IMPORT_PREFIX}/include/ini.h")
+
+####  libinih  ####
+###################
+#### INIReader ####
+
+if(INIH_WITH_INI_READER)
+  # Add library target (note: inih always has a static build in vcpkg).
+  add_library(unofficial::inih::inireader STATIC IMPORTED)
+
+  set_and_check(INIH_INIREADER_RELEASE "${_IMPORT_PREFIX}/lib/INIReader.lib")
+
+  # Add interface include directories and link interface language
+  set_target_properties(unofficial::inih::inireader PROPERTIES
+    INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+    IMPORTED_LINK_INTERFACE_LANGUAGES "C;CXX"
+    IMPORTED_LOCATION_RELEASE "${INIH_INIREADER_RELEASE}"
+    INTERFACE_LINK_LIBRARIES "unofficial::inih::libinih"
+    IMPORTED_CONFIGURATIONS "RELEASE"
+  )
+
+  if(INIH_WITH_DEBUG)
+    set_property(TARGET unofficial::inih::inireader APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
+    set_and_check(INIH_INIREADER_DEBUG "${_IMPORT_PREFIX}/debug/lib/INIReader.lib")
+    set_target_properties(unofficial::inih::inireader PROPERTIES 
+      IMPORTED_LOCATION_DEBUG "${INIH_INIREADER_DEBUG}"
+    )
+  endif()
+
+  list(APPEND _IMPORT_CHECK_FILES "${_IMPORT_PREFIX}/include/INIReader.h")
+endif()
+
+#### INIReader ####
+###################
 
 # Check header and library files are present.
 foreach(file ${_IMPORT_CHECK_FILES} )
