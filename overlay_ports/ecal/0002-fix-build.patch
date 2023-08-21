@@ -1,20 +1,5 @@
-From 0fa3289e1a27ef27f2c5ff1c66414ff4122a3ab6 Mon Sep 17 00:00:00 2001
-From: DownerCase <downercase8@gmail.com>
-Date: Sat, 8 Jul 2023 13:36:04 +0100
-Subject: [PATCH] fix build
-
----
- CMakeLists.txt                                      | 13 ++++++++++---
- contrib/ecalhdf5/CMakeLists.txt                     |  5 +++++
- contrib/ecalproto/CMakeLists.txt                    |  5 +++++
- ecal/core/CMakeLists.txt                            | 12 ++++++++----
- thirdparty/cmake_functions/CMakeLists.txt           |  2 ++
- .../cmake/CMakeFunctionsConfig.cmake.in             |  2 +-
- thirdparty/cmake_functions/cmake_functions.cmake    | 11 -----------
- 7 files changed, 31 insertions(+), 19 deletions(-)
-
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index dfd786cc0..f447aaf29 100644
+index 351fe6c3f..64d5bb384 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -27,7 +27,8 @@ endif (POLICY CMP0077)
@@ -27,7 +12,7 @@ index dfd786cc0..f447aaf29 100644
  
  project(eCAL)
  set(ECAL_PROJECT_ROOT "${CMAKE_CURRENT_LIST_DIR}")
-@@ -209,11 +210,13 @@ foreach (dep IN LISTS possible_subprojects)
+@@ -212,11 +213,13 @@ foreach (dep IN LISTS possible_subprojects)
    endif ()
  endforeach()
  
@@ -41,16 +26,15 @@ index dfd786cc0..f447aaf29 100644
  
  # if a package does need to be build, include the cmake file with build instructions
  foreach (dep IN LISTS possible_subprojects)
-@@ -229,7 +232,7 @@ if(MSVC)
+@@ -232,7 +235,6 @@ if(MSVC)
    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_OLD}")
  endif()
  
 -find_package(CMakeFunctions REQUIRED)
-+# find_package(CMakeFunctions REQUIRED)
  
  git_revision_information(DEFAULT ${ECAL_BUILD_VERSION})
  set(eCAL_VERSION_MAJOR  ${GIT_REVISION_MAJOR})
-@@ -327,7 +330,9 @@ add_subdirectory(ecal/core)
+@@ -330,7 +332,9 @@ add_subdirectory(ecal/core)
  # custom libs
  # --------------------------------------------------------
  add_subdirectory(lib/ThreadingUtils)
@@ -61,7 +45,7 @@ index dfd786cc0..f447aaf29 100644
  add_subdirectory(lib/ecal_utils)
  
  if(HAS_QT5)
-@@ -540,7 +545,9 @@ endif()
+@@ -549,7 +553,9 @@ endif()
  # --------------------------------------------------------
  # create package
  # --------------------------------------------------------
@@ -106,7 +90,7 @@ index 04f1a1b9a..58df32705 100644
  target_include_directories(${PROJECT_NAME} PUBLIC 
    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 diff --git a/ecal/core/CMakeLists.txt b/ecal/core/CMakeLists.txt
-index a14727fdb..87f111d5d 100644
+index 5c2b6e33d..3c7d57189 100644
 --- a/ecal/core/CMakeLists.txt
 +++ b/ecal/core/CMakeLists.txt
 @@ -20,8 +20,6 @@ project(core VERSION ${eCAL_VERSION_STRING})
@@ -118,7 +102,7 @@ index a14727fdb..87f111d5d 100644
  find_package(tcp_pubsub   REQUIRED)
  if (ECAL_NPCAP_SUPPORT)
    find_package(udpcap REQUIRED)
-@@ -501,14 +499,20 @@ target_link_libraries(${PROJECT_NAME}
+@@ -492,14 +490,20 @@ target_link_libraries(${PROJECT_NAME}
      $<$<BOOL:${WIN32}>:wsock32>
      $<$<BOOL:${QNXNTO}>:socket>
      asio::asio
@@ -152,17 +136,6 @@ index b3e93261a..3ba185a97 100644
 +if(CPACK_PACK_WITH_INNOSETUP)
  include(cmake/cpack_variables.cmake)
 +endif()
-diff --git a/thirdparty/cmake_functions/cmake/CMakeFunctionsConfig.cmake.in b/thirdparty/cmake_functions/cmake/CMakeFunctionsConfig.cmake.in
-index c773417ae..d84ac59d1 100644
---- a/thirdparty/cmake_functions/cmake/CMakeFunctionsConfig.cmake.in
-+++ b/thirdparty/cmake_functions/cmake/CMakeFunctionsConfig.cmake.in
-@@ -1,4 +1,4 @@
- @PACKAGE_INIT@
- 
- # make all runtask helper functions available
--include("@PACKAGE_cmake_functions_install_cmake_dir@/cmake_functions.cmake")
-\ No newline at end of file
-+include("${CMAKE_CURRENT_LIST_DIR}/cmake_functions.cmake")
 diff --git a/thirdparty/cmake_functions/cmake_functions.cmake b/thirdparty/cmake_functions/cmake_functions.cmake
 index 0c3659e5c..127eb14e6 100644
 --- a/thirdparty/cmake_functions/cmake_functions.cmake
@@ -191,6 +164,3 @@ index 0c3659e5c..127eb14e6 100644
  
  # Set list of all files to be installed by CMake Script.
  set(file_list
--- 
-2.41.0.windows.3
-

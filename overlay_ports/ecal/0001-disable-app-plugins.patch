@@ -1,17 +1,8 @@
-From 68490dcbd47bea3082ae584a15c8db8057e26102 Mon Sep 17 00:00:00 2001
-From: DownerCase <downercase8@gmail.com>
-Date: Sat, 8 Jul 2023 13:32:39 +0100
-Subject: [PATCH] disable app plugins
-
----
- CMakeLists.txt | 2 ++
- 1 file changed, 2 insertions(+)
-
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index eec89095c..dfd786cc0 100644
+index 4ea1fb066..351fe6c3f 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -348,8 +348,10 @@ endif(HAS_QT5)
+@@ -351,8 +351,10 @@ endif(HAS_QT5)
  # --------------------------------------------------------
  # ecal rec addon sdk
  # --------------------------------------------------------
@@ -22,6 +13,3 @@ index eec89095c..dfd786cc0 100644
  
  # --------------------------------------------------------
  # ecal time
--- 
-2.41.0.windows.3
-

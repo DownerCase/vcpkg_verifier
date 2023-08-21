@@ -1,18 +1,8 @@
-From 01b00188f84e8f1386b6990e1a9906f931b16cb7 Mon Sep 17 00:00:00 2001
-From: DownerCase <downercase8@gmail.com>
-Date: Sat, 15 Jul 2023 17:32:45 +0100
-Subject: [PATCH] allow static build of core
-
----
- ecal/core/CMakeLists.txt         | 14 +++++++++-----
- ecal/core/include/ecal/ecal_os.h |  6 +++++-
- 2 files changed, 14 insertions(+), 6 deletions(-)
-
 diff --git a/ecal/core/CMakeLists.txt b/ecal/core/CMakeLists.txt
-index 87f111d5d..d0e7a1860 100644
+index 3c7d57189..775f8a7c8 100644
 --- a/ecal/core/CMakeLists.txt
 +++ b/ecal/core/CMakeLists.txt
-@@ -400,7 +400,7 @@ set(ecal_header_base
+@@ -397,7 +397,7 @@ set(ecal_header_base
      ${ecal_header_msg}
  )
  
@@ -21,7 +11,7 @@ index 87f111d5d..d0e7a1860 100644
      ${ecal_custom_tclap_cpp_src}
      ${ecal_io_cpp_src} 
      ${ecal_io_mem_cpp_src} 
-@@ -436,7 +436,7 @@ if(UNIX)
+@@ -433,7 +433,7 @@ if(UNIX)
    set_source_files_properties(src/convert_utf.cpp PROPERTIES COMPILE_FLAGS -Wno-implicit-fallthrough)
  endif()
  
@@ -30,15 +20,7 @@ index 87f111d5d..d0e7a1860 100644
  
  add_library(eCAL::${PROJECT_NAME}   ALIAS ${PROJECT_NAME})
  add_library(eCAL::${PROJECT_NAME}_c ALIAS ${PROJECT_NAME}_c)
-@@ -444,7 +444,6 @@ add_library(eCAL::${PROJECT_NAME}_c ALIAS ${PROJECT_NAME}_c)
- target_link_libraries(${PROJECT_NAME}_c ${PROJECT_NAME})
- 
- target_compile_definitions(${PROJECT_NAME}_c
--  INTERFACE ECAL_C_DLL
-   PUBLIC
-     ASIO_STANDALONE
-     ASIO_DISABLE_VISIBILITY
-@@ -460,6 +459,11 @@ target_compile_definitions(${PROJECT_NAME}
+@@ -457,6 +457,11 @@ target_compile_definitions(${PROJECT_NAME}
      $<$<BOOL:${ECAL_HAS_ROBUST_MUTEX}>:ECAL_HAS_ROBUST_MUTEX>
      $<$<BOOL:${ECAL_USE_CLOCKLOCK_MUTEX}>:ECAL_USE_CLOCKLOCK_MUTEX>)
  
@@ -47,10 +29,10 @@ index 87f111d5d..d0e7a1860 100644
 +  target_compile_definitions(${PROJECT_NAME}   PUBLIC eCAL_SHARED_LIB)
 +endif()
 +
- if(ECAL_LAYER_ICEORYX)
-   find_package(iceoryx_posh REQUIRED)
-   target_link_libraries(${PROJECT_NAME} PRIVATE iceoryx_posh::iceoryx_posh)
-@@ -516,8 +520,8 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${SIMPLEINI_INCLUDE_DIRS})
+ if(ECAL_NPCAP_SUPPORT)
+   target_compile_definitions(${PROJECT_NAME}
+     PRIVATE ECAL_NPCAP_SUPPORT)
+@@ -507,8 +512,8 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${SIMPLEINI_INCLUDE_DIRS})
  set_property(TARGET ${PROJECT_NAME}   PROPERTY FOLDER ecal/core)
  set_property(TARGET ${PROJECT_NAME}_c PROPERTY FOLDER ecal/core)
  
@@ -90,6 +72,3 @@ index a962036f2..5d466cc86 100644
  #elif defined(__GNUC__) || defined(__clang__)
    #define ECALC_API_DEPRECATED __attribute__((deprecated))
  #else
--- 
-2.41.0.windows.3
-
