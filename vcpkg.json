@@ -2,7 +2,8 @@
   "name": "vcpkg-verifier",
   "version-string": "0.0.1",
   "dependencies": [
-    "ecal"
+    "ecal",
+	"tclap"
   ],
   "vcpkg-configuration": {
     "overlay-ports": [ "overlay_ports" ],

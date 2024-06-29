@@ -38,7 +38,7 @@ void print_person(const pb::People::Person& person)
 int main(int /*argc*/, char** /*argv*/)
 {
   // create a new measurement
-  eCAL::measurement::IMeasurement meas("measurement.hdf5");
+  eCAL::measurement::IMeasurement meas(MEASUREMENT_PATH);
 
   // create a channel (topic name "person")
   eCAL::measurement::IChannel<pb::People::Person> person_channel = meas.Get<pb::People::Person>("person");

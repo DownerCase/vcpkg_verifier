@@ -22,26 +22,20 @@
 #include <iostream>
 #include <sstream>
 #include <chrono>
-#include <thread>
 
 int main(int argc, char **argv)
 {
-  long long msgs  = 0;
-  long long bytes = 0;
-  long long slen  = 0;
+  long long msgs (0);
+  long long bytes(0);
 
   // initialize eCAL API
   eCAL::Initialize(argc, argv, "performance_rec");
 
   // create subscriber for topic "Performance"
-  eCAL::CSubscriber sub("Performance", "base:std::string");
-
-  // dump instance state if creation failed
-  if(!sub.IsCreated())
-  {
-    std::cout << "Could not create subscriber !" << std::endl;
-    return(0);
-  }
+  eCAL::SDataTypeInformation topic_info;
+  topic_info.encoding = "base";
+  topic_info.name = "std::string";
+  eCAL::CSubscriber sub("Performance", topic_info);
 
   // safe the start time
   auto start_time(std::chrono::steady_clock::now());
@@ -51,25 +45,32 @@ int main(int argc, char **argv)
   while(eCAL::Ok())
   {
     // receive content with infinite timeout
-    bool success = sub.ReceiveBuffer(rcv_buf, nullptr, -1);
+    const bool success = sub.ReceiveBuffer(rcv_buf, nullptr, -1);
     // collect data
     if(success)
     {
       msgs++;
-      slen = rcv_buf.size();
       bytes += rcv_buf.size();
     }
 
     // check time and print results every second
-    std::chrono::duration<double> diff_time = std::chrono::steady_clock::now() - start_time;
+    const std::chrono::duration<double> diff_time = std::chrono::steady_clock::now() - start_time;
     if (diff_time >= std::chrono::seconds(1))
     {
       start_time = std::chrono::steady_clock::now();
       std::stringstream out;
-      out << "Message size (kByte):  " << (unsigned int)(slen  / 1024)                            << std::endl;
-      out << "kByte/s:               " << (unsigned int)(bytes / 1024 /        diff_time.count()) << std::endl;
-      out << "MByte/s:               " << (unsigned int)(bytes / 1024 / 1024 / diff_time.count()) << std::endl;
-      out << "Messages/s:            " << (unsigned int)(msgs  /               diff_time.count()) << std::endl;
+      if (rcv_buf.size() > 15)
+      {
+        out << "Message [0 - 15]:      ";
+        for (auto i = 0; i < 16; ++i) out << rcv_buf[i] << " ";
+        out << std::endl;
+      }
+      out << "Message size (kByte):  " << (unsigned int)(rcv_buf.size()  / 1024.0)                             << std::endl;
+      out << "kByte/s:               " << (unsigned int)(bytes / 1024.0 /                   diff_time.count()) << std::endl;
+      out << "MByte/s:               " << (unsigned int)(bytes / 1024.0 / 1024.0 /          diff_time.count()) << std::endl;
+      out << "GByte/s:               " << (unsigned int)(bytes / 1024.0 / 1024.0 / 1024.0 / diff_time.count()) << std::endl;
+      out << "Messages/s:            " << (unsigned int)(msgs  /                            diff_time.count()) << std::endl;
+      out << "Latency (us):          " << (diff_time.count() * 1e6) / (double)msgs                             << std::endl;
       std::cout << out.str() << std::endl;
       msgs  = 0;
       bytes = 0;

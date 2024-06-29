@@ -22,47 +22,29 @@
 
 #include <iostream>
 #include <sstream>
-#include <mutex>
 #include <chrono>
 #include <thread>
 
-// globals
-std::chrono::steady_clock::time_point start_time(std::chrono::nanoseconds(0));
-long long                             g_msgs (0);
-long long                             g_bytes(0);
-
 // print performance results
-void PrintStatistic(const std::string& topic_name_, const std::chrono::duration<double>& diff_time_, const size_t size_, long long& bytes_, long long& msgs_)
+void PrintStatistic(const std::string& topic_name_, const std::chrono::duration<double>& diff_time_, const size_t size_, long long& bytes_, long long& msgs_, const struct eCAL::SReceiveCallbackData* data_)
 {
     std::stringstream out;
-    out << "Topic Name:            " << topic_name_                                    << std::endl;
-    out << "Message size (kByte):  " << (unsigned int)(size_  / 1024                            ) << std::endl;
-    out << "kByte/s:               " << (unsigned int)(bytes_ / 1024        / diff_time_.count()) << std::endl;
-    out << "MByte/s:               " << (unsigned int)(bytes_ / 1024 / 1024 / diff_time_.count()) << std::endl;
-    out << "Messages/s:            " << (unsigned int)(msgs_                / diff_time_.count()) << std::endl;
+    out << "Topic Name:            " << topic_name_                                                      << std::endl;
+    if (data_->size > 15)
+    {
+      out << "Message [0 - 15]:      ";
+      for (auto i = 0; i < 16; ++i) out << (static_cast<char*>(data_->buf))[i] << " ";
+      out << std::endl;
+    }
+    out << "Message size (kByte):  " << (unsigned int)(size_  / 1024.0)                                        << std::endl;
+    out << "kByte/s:               " << (unsigned int)(bytes_ / 1024.0 /                   diff_time_.count()) << std::endl;
+    out << "MByte/s:               " << (unsigned int)(bytes_ / 1024.0 / 1024.0 /          diff_time_.count()) << std::endl;
+    out << "GByte/s:               " << (unsigned int)(bytes_ / 1024.0 / 1024.0 / 1024.0 / diff_time_.count()) << std::endl;
+    out << "Messages/s:            " << (unsigned int)(msgs_  /                            diff_time_.count()) << std::endl;
+    out << "Latency (us):          " << (diff_time_.count() * 1e6) / (double)msgs_                             << std::endl;
     std::cout << out.str() << std::endl;
     msgs_  = 0;
     bytes_ = 0;
-}
-
-// subscriber callback function
-void OnReceive(const char* topic_name_, const struct eCAL::SReceiveCallbackData* data_)
-{
-  size_t size = data_->size;
-
-  g_msgs++;
-  g_bytes += size;
-
-  // block it 10 ms, so we emulate some workload in the callback
-  // std::this_thread::sleep_for(std::chrono::milliseconds(10));
-
-  // check time and print results every second
-  std::chrono::duration<double> diff_time = std::chrono::steady_clock::now() - start_time;
-  if (diff_time >= std::chrono::seconds(1))
-  {
-    PrintStatistic(topic_name_, diff_time, size, g_bytes, g_msgs);
-    start_time = std::chrono::steady_clock::now();
-  }
 }
 
 // main entry
@@ -74,15 +56,27 @@ int main(int argc, char **argv)
   // create subscriber for topic "Performance"
   eCAL::CSubscriber sub("Performance");
 
-  // dump instance state if creation failed
-  if(!sub.IsCreated())
-  {
-    std::cout << "Could not create subscriber !" << std::endl;
-    return(0);
-  }
+  // helper variables for time and throughput
+  std::chrono::steady_clock::time_point start_time(std::chrono::nanoseconds(0));
+  long long msgs (0);
+  long long bytes(0);
 
   // add callback
-  sub.AddReceiveCallback(std::bind(OnReceive, std::placeholders::_1, std::placeholders::_2));
+  auto on_receive = [&](const char* topic_name_, const struct eCAL::SReceiveCallbackData* data_) {
+    auto size = data_->size;
+
+    msgs++;
+    bytes += size;
+
+    // check time and print results every second
+    const std::chrono::duration<double> diff_time = std::chrono::steady_clock::now() - start_time;
+    if (diff_time >= std::chrono::seconds(1))
+    {
+      PrintStatistic(topic_name_, diff_time, size, bytes, msgs, data_);
+      start_time = std::chrono::steady_clock::now();
+    }
+  };
+  sub.AddReceiveCallback(std::bind(on_receive, std::placeholders::_1, std::placeholders::_2));
 
   // idle main thread
   while(eCAL::Ok())
